@@ -20,6 +20,34 @@ app.get("/bye", function(req, res){
   res.send("goodbye!!");
 });
 
+/*  Esses : antes de subredditName diz ao express que o que vem a seguir é uma variável.
+    Se eu digitar /r/qualquerCoisa/comments/qualquerCoisa, a mensagem "welcome" será exibida.
+*/
+app.get("/r/:subredditName/comments/:id", function(req, res){
+  res.send("welcome");
+});
+
+/*  Se eu quiser acessar a variável escolhida em subredditName para apresentar uma mensagem personalizada,
+    express gives a way to do that: the req object contains all the information about the incoming request
+*/
+app.get("/r/:subredditName/", function(req, res){
+  console.log(req); //Contém TUDO que vem do req quando você vai para /r/qualquerCoisa
+  /* dentro de req vai existir params, que é um objeto que contém todos os paramentros da rota
+     então se eu der um console log em req.params o resultado será  { subredditName: 'cu' }*/
+  console.log(req.params);
+  /*  Se eu quiser usar uma mensagem personalizada, podemos usar o req.params pra puxar o valor de subredditName e jogar numa variável */
+  var subreddit = req.params.subredditName;
+  res.send("welcome to " +subreddit);
+});
+
+/*  O path "*" é usado pra erro 404.
+    Ele vai ser ativado sempre que o usuário for para uma página cujo path não foi definido
+    ORDEM É IMPORTANTE! Esse route PRECISA ser a última rota!
+*/
+app.get("*", function(req, res){
+  res.send("teste");
+});
+
 /*  In express we have to write the code to tell it to listen for different requests.
     To do that, express gives us a method called "listen", then we need to provide the port to listen on.
 */
